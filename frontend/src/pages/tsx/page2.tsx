@@ -20,10 +20,10 @@ export default function Page2() {
     }
 
     return (
-        <>
+        <div className="page2">
             <h1>{user.username}</h1>
             <h2>Here's what we know about you: {user.bio}</h2>
-            <h2>Your most recent review: {user.mostRecentReview}</h2>
-        </>
+            <h2>Your most recent review: "{user.mostRecentReview}"</h2>
+        </div>
     )
 }
