@@ -4,6 +4,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 
 const app = express();
+// middleware
 app.use(cors());
 app.use(express.json());
 
@@ -18,14 +19,16 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
  */
 app.get("/api/user/:username", async (req, res) => {
   const username = (req.params.username || "").trim();
-  if (!username) return res.status(400).json({ error: "Missing username" });
+  if (!username) {
+    return res.status(400).json({ error: "Missing username" });
+  }
 
   const url = `https://letterboxd.com/${encodeURIComponent(username)}/`;
 
   try {
-    const { data: html } = await axios.get(url, {
+    const response = await axios.get(url, {
       headers: {
-        // helps avoid basic bot blocking
+        // avoid basic bot blocking by pretending to be a real browser
         "User-Agent":
           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome Safari",
         "Accept-Language": "en-US,en;q=0.9",
@@ -33,14 +36,20 @@ app.get("/api/user/:username", async (req, res) => {
       timeout: 15000,
     });
 
+    const html = response.data;
     const $ = cheerio.load(html);
 
-    // These selectors may change over time; treat as a starting point.
-    const displayName =
-      $('meta[property="og:title"]').attr("content")?.trim() || null;
+    // selectors
+    // starting point; might change later
+    /* const pageTitle = $("title").text()
+    console.log(pageTitle); */
+    const ogTitleContent = $('meta[property="og:title"]').attr("content");
+    const pageName : string | null = ogTitleContent ? ogTitleContent.trim() : null;
 
-    const bio =
-      $('meta[name="description"]').attr("content")?.trim() || null;
+    const descriptionContent = $('meta[name="description"]').attr("content");
+    const bio : string | null = descriptionContent ? descriptionContent.trim() : null;
+
+    const mostRecentReview = $(".js-review-body").eq(0).text().trim();
 
     // quick sanity check for “user not found”
     const isNotFound =
@@ -52,8 +61,9 @@ app.get("/api/user/:username", async (req, res) => {
     return res.json({
       username,
       url,
-      displayName,
+      pageName,
       bio,
+      mostRecentReview,
     });
   } catch (err: any) {
     const status = err?.response?.status;

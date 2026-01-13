@@ -1,5 +1,6 @@
 import '../css/page2.css';
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function Page2() {
     useEffect(() => {
@@ -11,8 +12,18 @@ export default function Page2() {
         }
     }, []);
 
+    const { state } = useLocation();
+    const user = state?.user;
+
+    if (!user) {
+        return <p>Error: no data</p>
+    }
+
     return (
-        // placeholder content
-        <h1 className="title">Page 2</h1>
+        <>
+            <h1>{user.username}</h1>
+            <h2>Here's what we know about you: {user.bio}</h2>
+            <h2>Your most recent review: {user.mostRecentReview}</h2>
+        </>
     )
 }
