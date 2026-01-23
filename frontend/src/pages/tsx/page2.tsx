@@ -31,11 +31,10 @@ export default function Page2() {
     if (!user) return <p>Error: no data</p>;
 
     // grab just the num of films from bio string
-    const user_bio = user.bio;
     const num_films: number = (() => {
-        let start_idx = user_bio.indexOf('and lists.') + 11;
-        let end_idx = user_bio.indexOf(' films watched.');
-        return Number(user_bio.slice(start_idx,end_idx));
+        let start_idx = user.bio.indexOf('and lists.') + 11;
+        let end_idx = user.bio.indexOf(' films watched.');
+        return Number(user.bio.slice(start_idx,end_idx));
     })();
     
     // change background color just for this page
@@ -53,7 +52,7 @@ export default function Page2() {
         } else if ((50 <= num_films) && (num_films < 100)) { // btwn 50 and 99 movies watched
             setMessage("Hmm...I'd give you a media literacy score of 6/10. Not bad, but not great.")
         } else if ((100 <= num_films) && (num_films < 250)) { // btwn 100 and 249
-            setMessage("That's a good amount! I'd trust you to pick a movie.")
+            setMessage("That's a good amount! I'd trust you for a movie rec.")
         } else { // more than 250 is lowkey crazy
             setMessage("That's a lot. I kinda don't believe you.")
         }
@@ -61,13 +60,13 @@ export default function Page2() {
 
     return (
         <div className="page2">
-            <motion.div className='intro-text' {...MoveUp(0,-150,1)}>
+            <motion.div className='intro-text' {...MoveUp(0,-150,0)}>
                 <h1>Hey, @{user.username}!</h1>
-                <h2>Let's get this stuff out of the way.</h2>
+                <h2>Let's get the easy stuff out of the way.</h2>
             </motion.div>
             <motion.div className='movies-watched' {...MoveUp(0,-100,3.8)}>
                 <motion.h1 {...SlideInLeft(1.5)}>
-                    You've watched <h2 style={{ color: '#D48E16', display: 'inline-block' }}> {num_films} </h2> movies. 
+                    You've watched <span style={{ color: '#D48E16', display: 'inline-block' }}> {num_films} </span> movies. 
                 </motion.h1>
                 <motion.h2 {...SlideInLeft(2.5)}> {message} </motion.h2> <br/>
             </motion.div>
@@ -75,12 +74,11 @@ export default function Page2() {
                 <motion.h1 {...SlideInLeft(5)}> Your most recent review was for: </motion.h1>
                 <motion.h1 {...SlideInLeft(6)} style={{ color: '#D48E16' }}>{user.mostRecentMovie}</motion.h1>
                 <motion.h2 {...SlideInLeft(7)}> And you said...</motion.h2><br/>
-                <motion.h2 {...SlideInLeft(8)}>"{user.mostRecentReview}"</motion.h2>
-                <br/>
+                <motion.h2 {...SlideInLeft(8)}>"{user.mostRecentReview}"</motion.h2><br/>
                 <motion.h2 {...SlideInLeft(9.5)}> Interesting...</motion.h2>
             </div>
             <br/>
-            <motion.button onClick={() => navigate('/page3')} {...SlideInLeft(10.5)}>Continue</motion.button>
+            <motion.button onClick={() => navigate('/page3', { state: { user }})} {...SlideInLeft(10.5)}>Continue</motion.button>
         </div>
     )
 }
