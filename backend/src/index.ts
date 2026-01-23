@@ -50,6 +50,7 @@ app.get("/api/user/:username", async (req, res) => {
     const bio : string | null = descriptionContent ? descriptionContent.trim() : null;
 
     const mostRecentReview = $(".js-review-body").eq(0).text().trim();
+    const mostRecentMovie = $("h2.name.-primary.prettify a").eq(0).text().trim();
 
     // quick sanity check for “user not found”
     const isNotFound =
@@ -64,7 +65,9 @@ app.get("/api/user/:username", async (req, res) => {
       pageName,
       bio,
       mostRecentReview,
+      mostRecentMovie
     });
+
   } catch (err: any) {
     const status = err?.response?.status;
     if (status === 404) return res.status(404).json({ error: "User not found" });
