@@ -16,11 +16,7 @@ export default function Homepage() {
 
         try {
             const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${username}`)
-
-            if (!res.ok) {
-                throw new Error("User not found");
-            }
-
+            if (!res.ok) throw new Error("Please enter a valid username");
             const data = await res.json();
             
             // navigate to page2 with data
