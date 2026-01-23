@@ -13,13 +13,10 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 // health check
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
-/**
- * GET /api/user/:username
- * Demo endpoint: fetch profile page HTML and return a few parsed fields.
- */
+// GET /api/user/:username
 app.get("/api/user/:username", async (req, res) => {
   const username = (req.params.username || "").trim();
-  if (!username) {
+  if (!req.params.username) {
     return res.status(400).json({ error: "Missing username" });
   }
 
@@ -40,17 +37,16 @@ app.get("/api/user/:username", async (req, res) => {
     const $ = cheerio.load(html);
 
     // selectors
-    // starting point; might change later
-    /* const pageTitle = $("title").text()
-    console.log(pageTitle); */
+    //
+    // page 1's selectors
     const ogTitleContent = $('meta[property="og:title"]').attr("content");
     const pageName : string | null = ogTitleContent ? ogTitleContent.trim() : null;
-
     const descriptionContent = $('meta[name="description"]').attr("content");
     const bio : string | null = descriptionContent ? descriptionContent.trim() : null;
-
     const mostRecentReview = $(".js-review-body").eq(0).text().trim();
     const mostRecentMovie = $("h2.name.-primary.prettify a").eq(0).text().trim();
+
+    // page 2's selectors
 
     // quick sanity check for “user not found”
     const isNotFound =
@@ -65,7 +61,7 @@ app.get("/api/user/:username", async (req, res) => {
       pageName,
       bio,
       mostRecentReview,
-      mostRecentMovie
+      mostRecentMovie,
     });
 
   } catch (err: any) {
