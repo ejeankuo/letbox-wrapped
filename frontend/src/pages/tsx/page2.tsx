@@ -80,7 +80,7 @@ export default function Page2() {
                 <motion.h2 {...SlideInLeft(9.5)}> Interesting...</motion.h2>
             </div>
             <br/>
-            <motion.button onClick={() => navigate('/page3.tsx')} {...SlideInLeft(10.5)}>Continue</motion.button>
+            <motion.button onClick={() => navigate('/page3')} {...SlideInLeft(10.5)}>Continue</motion.button>
         </div>
     )
 }
