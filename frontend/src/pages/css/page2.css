@@ -7,3 +7,13 @@
     display: flex;
     flex: 1;
 }
+
+.page2 button {
+    background-color: #D48E16;
+    width: 150px;
+    height: 45px;
+    border-radius: 25px;
+}
+.page2 button:hover {
+    background-color: #BA7D14;
+}

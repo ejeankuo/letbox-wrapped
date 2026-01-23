@@ -15,8 +15,7 @@ export default function Homepage() {
         setResult(null);
 
         try {
-            // temp hardcode TO BE UPDATED LATER
-            const res = await fetch(`http://localhost:3000/api/user/${username}`)
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${username}`)
 
             if (!res.ok) {
                 throw new Error("User not found");
