@@ -22,6 +22,7 @@ const SlideInLeft = (delay: number) => ({
 // page 2 major component
 export default function Page2() {
     const [message, setMessage] = useState("");
+    const [singleTense, setSingleTense] = useState(false);
     const navigate = useNavigate();
     const { state } = useLocation();
     
@@ -32,8 +33,9 @@ export default function Page2() {
 
     // grab just the num of films from bio string
     const num_films: number = (() => {
-        let start_idx = user.bio.indexOf('and lists.') + 11;
-        let end_idx = user.bio.indexOf(' films watched.');
+        const start_idx = user.bio.indexOf('and lists.') + 11;
+        const first_film = user.bio.indexOf('film');
+        const end_idx = user.bio.indexOf(' film', first_film + 1)
         return Number(user.bio.slice(start_idx,end_idx));
     })();
     
@@ -47,10 +49,15 @@ export default function Page2() {
     }, []);
 
     useEffect(() => {
-        if (num_films < 50) { // 50 is not that many movies, sorry
-            setMessage("Only? What are you, ten?")
+        if (num_films === 1) {
+            setSingleTense(true);
+        }
+        if (num_films < 10) { // 50 is not that many movies, sorry
+            setMessage("Dude. There's no way that's true.")
+        } else if ((10 <= num_films) && (num_films < 50)) { // btwn 10 and 49 movies watched
+            setMessage("Awww you're just a baby :(")
         } else if ((50 <= num_films) && (num_films < 100)) { // btwn 50 and 99 movies watched
-            setMessage("Hmm...I'd give you a media literacy score of 6/10. Not bad, but not great.")
+            setMessage("I mean... I guess...that's fine...")
         } else if ((100 <= num_films) && (num_films < 250)) { // btwn 100 and 249
             setMessage("That's a good amount! I'd trust you for a movie rec.")
         } else { // more than 250 is lowkey crazy
@@ -60,14 +67,13 @@ export default function Page2() {
 
     return (
         <div className="page2">
-            <motion.div className='intro-text' {...MoveUp(0,-150,0)}>
+            <motion.div className='intro-text' {...MoveUp(20,-30,0)}>
                 <h1>Hey, @{user.username}!</h1>
                 <h2>Let's get the easy stuff out of the way.</h2>
             </motion.div>
-            <motion.div className='movies-watched' {...MoveUp(0,-100,3.8)}>
-                <motion.h1 {...SlideInLeft(1.5)}>
-                    You've watched <span style={{ color: '#D48E16', display: 'inline-block' }}> {num_films} </span> movies. 
-                </motion.h1>
+            <motion.div className='movies-watched' {...MoveUp(20,-10,3.8)}>
+                {singleTense && <motion.h1 {...SlideInLeft(1.5)}>You've watched <span style={{ color: '#D48E16', display: 'inline-block' }}> {num_films} </span> movie.</motion.h1>}
+                {!singleTense && <motion.h1 {...SlideInLeft(1.5)}> You've watched <span style={{ color: '#D48E16', display: 'inline-block' }}> {num_films} </span> movies. </motion.h1>}
                 <motion.h2 {...SlideInLeft(2.5)}> {message} </motion.h2> <br/>
             </motion.div>
             <div className="recent-review">
@@ -78,7 +84,19 @@ export default function Page2() {
                 <motion.h2 {...SlideInLeft(9.5)}> Interesting...</motion.h2>
             </div>
             <br/>
-            <motion.button onClick={() => navigate('/page3', { state: { user }})} {...SlideInLeft(10.5)}>Continue</motion.button>
+            <motion.button 
+                {...SlideInLeft(10.5)}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.8 }}
+                transition={{
+                  x: { ...spring, delay: 10.5 },
+                  opacity: { ...spring, delay: 10.5 },
+                  scale: { duration: 0.12 },
+                }}
+                onClick={() => navigate('/page3', { state: { user }})}
+            >
+                Continue
+            </motion.button>
         </div>
     )
 }

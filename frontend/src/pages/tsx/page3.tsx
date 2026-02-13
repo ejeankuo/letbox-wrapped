@@ -8,7 +8,7 @@ const spring: Transition = { type: "spring", stiffness: 100 }
 
 const MoveUp = (init_y: number, animate_y: number, delay: number) => ({
     initial: { y: init_y },
-    animate: { y: animate_y },
+    animate: { y: animate_y},
     transition: { ...spring, delay: delay }
 });
 
@@ -60,6 +60,19 @@ export default function Page3() {
             document.body.style.backgroundColor = "";
         }
     },[]);
+
+    if (favorites_str === "") {
+        return (
+            <>
+                <motion.h1 {...MoveUp(0,-130,0)}>You don't have any favorite films...</motion.h1>
+                <motion.div {...MoveUp(0,-100,4.5)}>
+                    <motion.h1 {...SlideInLeft(1)}>I get it though.</motion.h1>
+                    <motion.h2 {...SlideInLeft(2)}> I also have commitment issues sometimes.</motion.h2>
+                    <motion.h2 {...SlideInLeft(3.5)}> ...Just kidding.</motion.h2>
+                </motion.div>
+            </>
+        )
+    }
 
     return (
         <>
