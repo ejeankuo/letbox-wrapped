@@ -55,7 +55,7 @@ export default function Page2() {
         if (num_films < 10) { // 50 is not that many movies, sorry
             setMessage("Dude. There's no way that's true.")
         } else if ((10 <= num_films) && (num_films < 50)) { // btwn 10 and 49 movies watched
-            setMessage("Awww you're just a baby :(")
+            setMessage("Not a big fan of movies, eh?")
         } else if ((50 <= num_films) && (num_films < 100)) { // btwn 50 and 99 movies watched
             setMessage("I mean... I guess...that's fine...")
         } else if ((100 <= num_films) && (num_films < 250)) { // btwn 100 and 249

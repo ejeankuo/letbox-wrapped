@@ -55,12 +55,10 @@ export default function Page3() {
 
     useEffect(() => {
         document.body.style.backgroundColor = "#7E6072";
-
-        return () => {
-            document.body.style.backgroundColor = "";
-        }
+        return () => { document.body.style.backgroundColor = ""; }
     },[]);
 
+    // sometimes a user has no favorite movies added, so display a different message in that case
     if (favorites_str === "") {
         return (
             <>
